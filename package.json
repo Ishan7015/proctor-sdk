@@ -1,6 +1,6 @@
 {
   "name": "proctor-sdk",
-  "version": "1.1.0",
+  "version": "1.0.1",
   "description": "A light-weight proctoring library for some of the commonly used proctoring events",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
