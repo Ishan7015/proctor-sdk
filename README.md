@@ -59,17 +59,11 @@ npm install proctor-sdk
 yarn add proctor-sdk
 ```
 
-_(Replace `proctor-sdk` with the actual name of your published package on npm.)_
 
 Then, import it into your project:
 
 ```javascript
-// Using ES6 modules
 import ProctorSDK, { STATUS_TYPES, WARNING_TYPES } from "proctor-sdk";
-
-// For CommonJS environments (if your UMD build is configured correctly)
-// const ProctorSDK = require('proctor-sdk').default; // Or just require('proctor-sdk') if default isn't needed
-// const { STATUS_TYPES, WARNING_TYPES } = require('proctor-sdk');
 ```
 
 ## Quick Start
@@ -102,17 +96,8 @@ Here's a minimal example of how to use ProctorSDK in plain JavaScript after inst
     <div id="statusLog">Status: Idle</div>
     <div id="violationsLog"></div>
 
-    <!-- 
-        If using in a browser directly with <script type="module">, 
-        you'd typically use a bundler (like Webpack, Rollup, Parcel) to resolve 'proctor-sdk'.
-        For a simple browser demo without a bundler, you might need to use the UMD build.
-        Assuming a build process that makes 'ProctorSDK' available globally for UMD:
-        <script src="node_modules/proctor-sdk/dist/index.js"></script> 
-    -->
     <script type="module">
-      // This import assumes your project is set up to resolve node_modules (e.g., using a bundler)
-      // or you are using an import map.
-      import ProctorSDK from "proctor-sdk"; // Replace with actual package name
+      import ProctorSDK from "proctor-sdk"; 
 
       const proctorContainer = document.getElementById("proctorView");
       const startBtn = document.getElementById("startBtn");
@@ -121,7 +106,7 @@ Here's a minimal example of how to use ProctorSDK in plain JavaScript after inst
       const violationsLog = document.getElementById("violationsLog");
 
       const sdkConfig = {
-        containerElement: proctorContainer, // Can also be the ID string 'proctorView'
+        containerElement: proctorContainer,
         callbacks: {
           onStatusChange: (statusData) => {
             console.log("SDK Status:", statusData);
@@ -152,8 +137,6 @@ Here's a minimal example of how to use ProctorSDK in plain JavaScript after inst
 
       let proctorInstance;
       try {
-        // Access static properties if needed from the imported module
-        // console.log(ProctorSDK.STATUS_TYPES.INITIALIZING);
         proctorInstance = new ProctorSDK(sdkConfig);
       } catch (e) {
         console.error("Fatal SDK Init Error:", e);
@@ -239,7 +222,7 @@ The `ProctorSDK` is initialized with a configuration object.
 The main class you interact with.
 
 ```javascript
-import ProctorSDK from "proctor-sdk"; // Replace with your package name
+import ProctorSDK from "proctor-sdk";
 const instance = new ProctorSDK(config);
 ```
 
@@ -287,14 +270,13 @@ Passed to the `onViolation` callback.
 
 ```typescript
 interface ViolationData {
-  type: string; // A value from ProctorSDK.WARNING_TYPES
-  active: boolean; // true if the violation is active, false if cleared
-  message: string; // Human-readable message
-  timestamp: Date; // When the event occurred
+  type: string; 
+  active: boolean; 
+  message: string; 
+  timestamp: Date; 
   details?: {
-    // Optional, type-specific details
-    count?: number; // For MULTIPLE_FACES
-    eventType?: "copy" | "paste" | "cut"; // For COPY_PASTE_ATTEMPT
+    count?: number; 
+    eventType?: "copy" | "paste" | "cut";
   };
 }
 ```
@@ -304,14 +286,13 @@ interface ViolationData {
 ```jsx
 // SimpleProctor.jsx / SimpleProctor.tsx
 import React, { useEffect, useRef, useCallback } from "react";
-import ProctorSDK, { STATUS_TYPES, WARNING_TYPES } from "proctor-sdk"; // Replace with your package name
+import ProctorSDK, { STATUS_TYPES, WARNING_TYPES } from "proctor-sdk";
 
 const SimpleProctor = () => {
   const proctorContainerRef = useRef(null);
   const proctorSDKInstanceRef = useRef(null);
 
   const handleStatusChange = useCallback((statusData) => {
-    // Type statusData with StatusData interface if using TS
     console.log(
       "[ProctorSDK Status]",
       statusData.status,
@@ -322,7 +303,6 @@ const SimpleProctor = () => {
   }, []);
 
   const handleViolation = useCallback((violation) => {
-    // Type violation with ViolationData interface if using TS
     if (violation.active) {
       console.warn(
         `[ProctorSDK Violation ACTIVE] ${violation.type}: ${violation.message}`,
@@ -338,23 +318,20 @@ const SimpleProctor = () => {
   useEffect(() => {
     if (proctorContainerRef.current && !proctorSDKInstanceRef.current) {
       const sdkConfig = {
-        // Type sdkConfig with ProctorSDKConfig interface if using TS
         containerElement: proctorContainerRef.current,
         callbacks: {
           onStatusChange: handleStatusChange,
           onViolation: handleViolation,
         },
-        // Add other configurations like enabledChecks if needed
+
       };
       try {
         proctorSDKInstanceRef.current = new ProctorSDK(sdkConfig);
       } catch (e) {
         console.error("[ProctorSDK] Initialization failed:", e);
-        // Update UI or state to reflect initialization error
       }
     }
     return () => {
-      // Cleanup on unmount
       if (proctorSDKInstanceRef.current) {
         proctorSDKInstanceRef.current.destroy();
         proctorSDKInstanceRef.current = null;
@@ -408,37 +385,13 @@ export default SimpleProctor;
 - **TensorFlow.js/WebGL:** Performance depends on WebGL and device capabilities.
 - **Permissions:** Camera permission is essential.
 
-Test thoroughly on target browsers.
-
 ## Contributing
 
 Contributions are welcome! Please open an issue or pull request on the project repository.
 
-_(Link to your GitHub repository here)_
+[Github Repository](https://github.com/Ishan7015/proctor-sdk.git)
 
 ## License
 
 This project is licensed under the MIT License - see the LICENSE.md file for details.
-_(Or your chosen license)_
 
-```
---- END OF FILE README.md ---
-
-**Key Changes Made:**
-
-1.  **Installation Section:**
-    *   Changed from "copy `src`" to `npm install proctor-sdk`.
-    *   Updated import examples to reflect importing from the package name.
-    *   Added a note about using a bundler for the plain HTML/JS Quick Start if importing directly from `node_modules` in a browser context or using the UMD build.
-2.  **Quick Start Import Path:**
-    *   Changed `import ProctorSDK from './path/to/your/sdk/src/index.js';` to `import ProctorSDK from 'proctor-sdk';` (assuming `proctor-sdk` is the package name).
-3.  **API Reference Import Path:**
-    *   Updated the import example to `import ProctorSDK from 'proctor-sdk';`.
-4.  **React Example Import Path:**
-    *   Updated the import to `import ProctorSDK, { STATUS_TYPES, WARNING_TYPES } from 'proctor-sdk';`.
-5.  **TypeScript Support Note:** Added a small note under "Features" about TypeScript definitions.
-6.  **Consistency:** Ensured that "proctor-sdk" is used consistently as the placeholder package name. You'll need to replace this with your actual package name.
-7.  **Error Handling in Quick Start:** Added `instanceof Error` check for the caught error message.
-
-This version of the README is more aligned with how users would consume your SDK after it has been published as an npm package. Remember to replace all instances of `proctor-sdk` with the actual name you choose for your package on npm.
-```
